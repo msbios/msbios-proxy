@@ -25,7 +25,7 @@ $proxy = new \MSBios\Proxy\Proxy(
 );
 
 // Forward the request and get the response.
-$response = $proxy->forward($request)->to('http://unba.org.com');
+$response = $proxy->forward($request)->to('http://unba.org.ua/');
 
 // Output response to the browser.
 (new Zend\Diactoros\Response\SapiEmitter)->emit($response);

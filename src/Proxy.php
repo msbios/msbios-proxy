@@ -62,8 +62,7 @@ class Proxy implements ProxyInterface
      */
     public function to($target)
     {
-        if (is_null($this->request))
-        {
+        if (is_null($this->request)) {
             throw new UnexpectedValueException('Missing request instance.');
         }
 
@@ -90,8 +89,7 @@ class Proxy implements ProxyInterface
 
         /** @var array $stack */
         $stack = $this->filters;
-        $stack[] = function (RequestInterface $request, ResponseInterface $response, callable $next)
-        {
+        $stack[] = function (RequestInterface $request, ResponseInterface $response, callable $next) {
             $response = $this->adapter->send($request);
             return $next($request, $response);
         };
