@@ -14,6 +14,16 @@ use PHPUnit\Framework\TestCase;
  */
 class ModuleTest extends TestCase
 {
+
+    /**
+     * @return $this
+     */
+    public function testGetModuleConfig()
+    {
+        $this->assertInternalType('array', (new Module)->getConfig());
+        return $this;
+    }
+
     /**
      * @return $this
      */

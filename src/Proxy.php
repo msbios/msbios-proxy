@@ -8,7 +8,6 @@ namespace MSBios\Proxy;
 
 use MSBios\Proxy\Adapter\AdapterInterface;
 use MSBios\Proxy\Exception\UnexpectedValueException;
-use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;

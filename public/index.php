@@ -1,8 +1,7 @@
 <?php
-/**
- * @access protected
- * @author Judzhin Miles <info[woof-woof]msbios.com>
- */
+
+use Zend\Mvc\Application;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * This makes our life easier when dealing with paths. Everything is relative
@@ -22,21 +21,20 @@ if (php_sapi_name() === 'cli-server') {
 // Composer autoloading
 include __DIR__ . '/../vendor/autoload.php';
 
-/** @var \Psr\Http\Message\ServerRequestInterface $request */
-$request = \Zend\Diactoros\ServerRequestFactory::fromGlobals();
+if (! class_exists(Application::class)) {
+    throw new RuntimeException(
+        "Unable to load application.\n"
+        . "- Type `composer install` if you are developing locally.\n"
+        . "- Type `vagrant ssh -c 'composer install'` if you are using Vagrant.\n"
+        . "- Type `docker-compose run zf composer install` if you are using Docker.\n"
+    );
+}
 
-/** @var \GuzzleHttp\ClientInterface $client */
-$client = new \GuzzleHttp\Client;
+// Retrieve configuration
+$appConfig = require __DIR__ . '/../config/application.config.php';
+if (file_exists(__DIR__ . '/../config/development.config.php')) {
+    $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../config/development.config.php');
+}
 
-/** @var \MSBios\Proxy\ProxyInterface $proxy */
-$proxy = new \MSBios\Proxy\Proxy(
-    new \MSBios\Proxy\Adapter\GuzzleAdapter($client)
-);
-
-$proxy->filter(new \MSBios\Proxy\Filter\RemoveEncodingFilter);
-
-// Forward the request and get the response.
-$response = $proxy->forward($request)->to('http://unba.org.ua');
-
-// Output response to the browser.
-(new Zend\Diactoros\Response\SapiEmitter)->emit($response);
+// Run the application!
+Application::init($appConfig)->run();
