@@ -25,7 +25,11 @@ $proxy = new \MSBios\Proxy\Proxy(
 );
 
 // Forward the request and get the response.
-$response = $proxy->forward($request)->to('http://unba.org.ua/');
+// $response = $proxy->forward($request)->to('https://someapprentice.github.io');
+// $response = $proxy->forward($request)->to('http://unba.org.ua');
+$response = $proxy->forward($request)->to('http://open-power-dev.demo.gns-it.com');
+
+echo $response->getBody()->__toString(); die();
 
 // Output response to the browser.
-(new Zend\Diactoros\Response\SapiEmitter)->emit($response);
+// echo (new Zend\Diactoros\Response\SapiEmitter)->emit($response);

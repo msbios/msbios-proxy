@@ -45,6 +45,7 @@
     "upload-coverage": "coveralls -v",
     "serve": "php -S 0.0.0.0:3107 -t public index.php",
     "proxy": "php -S 0.0.0.0:1986 -t public proxy.php",
+    "example": "php -S 0.0.0.0:1984 example.php",
     "commit": "git add . && git commit -a -m \"Lazy Composer Commiter\" && git push"
   },
   "extra": {

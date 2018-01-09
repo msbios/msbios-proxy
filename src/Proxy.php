@@ -3,6 +3,7 @@
  * @access protected
  * @author Judzhin Miles <info[woof-woof]msbios.com>
  */
+
 namespace MSBios\Proxy;
 
 use MSBios\Proxy\Adapter\AdapterInterface;
@@ -69,27 +70,25 @@ class Proxy implements ProxyInterface
         /** @var UriInterface $target */
         $target = new Uri($target);
 
-        // Overwrite target scheme and host.
+        /** @var UriInterface $uri */
         $uri = $this->request->getUri()
             ->withScheme($target->getScheme())
-            ->withHost($target->getHost());
-
-        // Check for custom port.
-        if ($port = $target->getPort()) {
-            $uri = $uri->withPort($port);
-        }
+            ->withHost($target->getHost())
+            ->withPort($target->getPort());
 
         // Check for subdirectory.
         if ($path = $target->getPath()) {
+            /** @var UriInterface $uri */
             $uri = $uri->withPath(rtrim($path, '/') . '/' . ltrim($uri->getPath(), '/'));
         }
 
-        /** @var MessageInterface $request */
+        /** @var RequestInterface $request */
         $request = $this->request->withUri($uri);
 
-        /** @var array $stack */
+        /** @var callable[] $stack */
         $stack = $this->filters;
         $stack[] = function (RequestInterface $request, ResponseInterface $response, callable $next) {
+            /** @var ResponseInterface $response */
             $response = $this->adapter->send($request);
             return $next($request, $response);
         };

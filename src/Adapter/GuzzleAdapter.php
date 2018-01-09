@@ -16,7 +16,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 class GuzzleAdapter implements AdapterInterface
 {
-
     /** @var ClientInterface */
     protected $client;
 

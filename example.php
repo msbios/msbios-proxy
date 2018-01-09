@@ -24,6 +24,8 @@ if ($query) {
 // $base = 'https://someapprentice.github.io/maintaskforlayout/';
 $base = 'http://gns-it.com/';
 $base = 'http://unba.org.ua/';
+$base = 'http://open-power-dev.demo.gns-it.com/';
+
 $proxyUrl = $base . $newPath;
 // $context = stream_context_create();
 $contents = @file_get_contents($proxyUrl /* , false, $context */);
