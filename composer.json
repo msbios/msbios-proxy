@@ -32,7 +32,8 @@
   "require-dev": {
     "msbios/application": "^1.0",
     "msbios/test": "^1.0",
-    "msbios/debug": "^1.0"
+    "msbios/debug": "^1.0",
+    "codedungeon/phpunit-result-printer": "^0.5.0"
   },
   "scripts": {
     "cs-check": "phpcs",
