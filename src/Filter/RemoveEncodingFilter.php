@@ -6,7 +6,6 @@
 
 namespace MSBios\Proxy\Filter;
 
-
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 

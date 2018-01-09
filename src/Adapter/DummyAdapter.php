@@ -13,7 +13,8 @@ use Zend\Diactoros\Response;
  * Class DummyAdapter
  * @package MSBios\Proxy\Adapter
  */
-class DummyAdapter implements AdapterInterface {
+class DummyAdapter implements AdapterInterface
+{
 
     /**
      * Send the request and return the response.
@@ -23,6 +24,9 @@ class DummyAdapter implements AdapterInterface {
      */
     public function send(RequestInterface $request)
     {
-        return new Response($request->getBody(), 200);
+        return new Response(
+            $request->getBody(),
+            \Zend\Http\Response::STATUS_CODE_200
+        );
     }
 }
