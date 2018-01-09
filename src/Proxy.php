@@ -43,6 +43,18 @@ class Proxy implements ProxyInterface
     }
 
     /**
+     * Add filter middleware.
+     *
+     * @param callable $callable
+     * @return $this
+     */
+    public function filter(callable $callable)
+    {
+        $this->filters[] = $callable;
+        return $this;
+    }
+
+    /**
      * Prepare the proxy to forward a request instance.
      *
      * @param  RequestInterface $request

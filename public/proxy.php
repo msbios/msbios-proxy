@@ -21,8 +21,11 @@ $client = new \GuzzleHttp\Client;
 
 /** @var \MSBios\Proxy\ProxyInterface $proxy */
 $proxy = new \MSBios\Proxy\Proxy(
-    new \MSBios\Proxy\Adapter\GuzzleAdapter($client)
+    // new \MSBios\Proxy\Adapter\GuzzleAdapter($client)
+    new \MSBios\Proxy\Adapter\DummyAdapter($client)
 );
+
+$proxy->filter(new \MSBios\Proxy\Filter\RemoveEncodingFilter);
 
 // Forward the request and get the response.
 // $response = $proxy->forward($request)->to('https://someapprentice.github.io');
