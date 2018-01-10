@@ -39,7 +39,7 @@ $proxy->filter(new \MSBios\Proxy\Filter\RemoveEncodingFilter);
 $response = $proxy->forward($request)
     // ->to('http://unba.org.ua');
     // ->to('http://open-power-dev.demo.gns-it.com');
-    ->to('http://erau.unba.org.ua');
+    ->to('http://gns-it.com');
 
 // Output response to the browser.
 (new Zend\Diactoros\Response\SapiEmitter)->emit($response);
