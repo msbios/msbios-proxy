@@ -1,7 +1,8 @@
 <?php
-
-use Zend\Mvc\Application;
-use Zend\Stdlib\ArrayUtils;
+/**
+ * @access protected
+ * @author Judzhin Miles <info[woof-woof]msbios.com>
+ */
 
 /**
  * This makes our life easier when dealing with paths. Everything is relative
@@ -21,20 +22,43 @@ if (php_sapi_name() === 'cli-server') {
 // Composer autoloading
 include __DIR__ . '/../vendor/autoload.php';
 
-if (! class_exists(Application::class)) {
-    throw new RuntimeException(
-        "Unable to load application.\n"
-        . "- Type `composer install` if you are developing locally.\n"
-        . "- Type `vagrant ssh -c 'composer install'` if you are using Vagrant.\n"
-        . "- Type `docker-compose run zf composer install` if you are using Docker.\n"
-    );
-}
+/** @var \Psr\Http\Message\ServerRequestInterface $request */
+$request = \Zend\Diactoros\ServerRequestFactory::fromGlobals();
 
-// Retrieve configuration
-$appConfig = require __DIR__ . '/../config/application.config.php';
-if (file_exists(__DIR__ . '/../config/development.config.php')) {
-    $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../config/development.config.php');
-}
+/** @var \GuzzleHttp\ClientInterface $client */
+$client = new \GuzzleHttp\Client;
 
-// Run the application!
-Application::init($appConfig)->run();
+/** @var \MSBios\Proxy\ProxyInterface $proxy */
+$proxy = new \MSBios\Proxy\Proxy(
+    new \MSBios\Proxy\Adapter\GuzzleAdapter($client)
+);
+
+$proxy->filter(new \MSBios\Proxy\Filter\RemoveEncodingFilter);
+
+// Forward the request and get the response.
+$response = $proxy
+    ->forward($request)
+    ->filter(function ($request, $response, $next) {
+        // Manipulate the request object.
+        $request = $request->withHeader('User-Agent', 'FishBot/1.0');
+
+        /** @var \GuzzleHttp\Psr7\Response $response */
+        $response = $next($request, $response);
+
+        /** @var \GuzzleHttp\Psr7\Response $response */
+        $response = $response->withHeader('X-Proxy-Foo', 'Bar');
+
+
+        $body = $response->getBody();
+        /** @var string $contents */
+        $contents = $body->getContents();
+
+        $body->write(str_replace('https://gns-it.com/', '/', $contents));
+        $response->withBody($body);
+
+        return $response;
+    })
+    ->to('https://gns-it.com');
+
+// Output response to the browser.
+(new Zend\Diactoros\Response\SapiEmitter)->emit($response);
