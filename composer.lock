@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2d14c841dad83def4eba0acf4081582",
+    "content-hash": "e2258125e8590a8224b3d4ba955e9c4d",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -186,6 +186,59 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "jenssegers/proxy",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jenssegers/php-proxy.git",
+                "reference": "1351720a0039020b1429506b94439c149e945e89"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jenssegers/php-proxy/zipball/1351720a0039020b1429506b94439c149e945e89",
+                "reference": "1351720a0039020b1429506b94439c149e945e89",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0",
+                "psr/http-message": "^1.0",
+                "relay/relay": "^1.0",
+                "zendframework/zend-diactoros": "^1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.1",
+                "phpunit/phpunit": "^6.0|^7.0",
+                "satooshi/php-coveralls": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Proxy\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ota Mares",
+                    "email": "o.mares@rebuy.de",
+                    "homepage": "http://www.rebuy.de"
+                },
+                {
+                    "name": "Jens Segers",
+                    "homepage": "https://jenssegers.com"
+                }
+            ],
+            "description": "Proxy library that forwards requests to the desired url and returns the response.",
+            "homepage": "https://github.com/jenssegers/php-proxy",
+            "keywords": [
+                "proxy"
+            ],
+            "time": "2018-05-12T21:24:32+00:00"
         },
         {
             "name": "msbios/msbios",

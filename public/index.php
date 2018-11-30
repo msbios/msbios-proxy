@@ -22,18 +22,22 @@ if (php_sapi_name() === 'cli-server') {
 // Composer autoloading
 include __DIR__ . '/../vendor/autoload.php';
 
-/** @var \Psr\Http\Message\ServerRequestInterface $request */
-$request = \Zend\Diactoros\ServerRequestFactory::fromGlobals();
+use Proxy\Proxy;
+use Proxy\Adapter\Guzzle\GuzzleAdapter;
+use Proxy\Filter\RemoveEncodingFilter;
+use Zend\Diactoros\ServerRequestFactory;
 
-/** @var \GuzzleHttp\ClientInterface $client */
-$client = new \GuzzleHttp\Client;
+// Create a PSR7 request based on the current browser request.
+$request = ServerRequestFactory::fromGlobals();
 
-/** @var \MSBios\Proxy\ProxyInterface $proxy */
-$proxy = new \MSBios\Proxy\Proxy(
-    new \MSBios\Proxy\Adapter\GuzzleAdapter($client)
-);
+// Create a guzzle client
+$guzzle = new GuzzleHttp\Client;
 
-$proxy->filter(new \MSBios\Proxy\Filter\RemoveEncodingFilter);
+// Create the proxy instance
+$proxy = new Proxy(new GuzzleAdapter($guzzle));
+
+// Add a response filter that removes the encoding headers.
+$proxy->filter(new RemoveEncodingFilter);
 
 // Forward the request and get the response.
 $response = $proxy
@@ -42,23 +46,16 @@ $response = $proxy
         // Manipulate the request object.
         $request = $request->withHeader('User-Agent', 'FishBot/1.0');
 
-        /** @var \GuzzleHttp\Psr7\Response $response */
+        // Call the next item in the middleware.
         $response = $next($request, $response);
 
-        /** @var \GuzzleHttp\Psr7\Response $response */
+        // Manipulate the response object.
         $response = $response->withHeader('X-Proxy-Foo', 'Bar');
-
-
-        $body = $response->getBody();
-        /** @var string $contents */
-        $contents = $body->getContents();
-
-        $body->write(str_replace('https://gns-it.com/', '/', $contents));
-        $response->withBody($body);
 
         return $response;
     })
     ->to('https://gns-it.com');
 
 // Output response to the browser.
-(new Zend\Diactoros\Response\SapiEmitter)->emit($response);
+(new Zend\Diactoros\Response\SapiEmitter)
+    ->emit($response);

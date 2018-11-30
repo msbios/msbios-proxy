@@ -6,10 +6,4 @@
 namespace MSBios\Proxy;
 
 return [
-
-    'service_manager' => [
-        'factories' => [
-        ]
-    ],
-
 ];
